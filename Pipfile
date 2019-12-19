@@ -9,6 +9,8 @@ verify_ssl = true
 tensorflow = "*"
 matplotlib = "*"
 opencv-python = "*"
+pyyaml = "*"
+pathlib = "*"
 
 [requires]
 python_version = "3.7"
