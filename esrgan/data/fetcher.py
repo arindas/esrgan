@@ -4,6 +4,14 @@ import wget
 import yaml
 import os
 
+def is_valid_url (url):
+    try:
+        from urllib.parse import urlparse 
+        result = urlparse (url)
+        return all([result.scheme, result.netloc, result.path])
+    except:
+        return False
+
 class DatasetFetcher:
     def __init__ (self, config_path="config/data.yaml"):
         self.load_config (config_path)
@@ -19,11 +27,11 @@ class DatasetFetcher:
         prefix = self.config['datadir']
 
         for dataset in self.config['datasets']:
-            links = dataset[list(dataset)[0]]
-            print (links)
+            urls = dataset[list(dataset)[0]]
+            print (urls)
 
-            for item, url in links.items():
-                if len(link) == 0:
+            for item, url in urls.items():
+                if not is_valid_url(url):
                     continue
 
                 folder = f'{prefix}/{dataset}/{item}'
