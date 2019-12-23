@@ -26,7 +26,7 @@ class DatasetFetcher:
                 if len(link) == 0:
                     continue
 
-                folder = f'${prefix}/${dataset}/${item}'
+                folder = f'{prefix}/{dataset}/{item}'
                 os.makedirs (folder, exist_ok=True)
                 filename = wget.download (url=url, out=folder)
                 shutil.unpack_archive (filename, folder)
