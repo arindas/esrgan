@@ -37,6 +37,7 @@ class DatasetFetcher:
                     continue
 
                 folder = f'{prefix}/{subdir}/{item}'
+                print (folder)
                 os.makedirs(folder, exist_ok=True)
                 filename = wget.download(url=url, out=folder)
                 print(filename)
