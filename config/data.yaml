@@ -1,4 +1,4 @@
-datadir: "esrgan/dataset"
+datadir: "esrgan/datasets"
 
 datasets:
   - div2k:  
