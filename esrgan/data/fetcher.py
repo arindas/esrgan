@@ -30,15 +30,15 @@ class DatasetFetcher:
         for dataset in self.config['datasets']:
             subdir = list(dataset)[0]
             urls = dataset[subdir]
-            print(urls)
+            print(subdir, urls)
 
             for item, url in urls.items():
                 if not is_valid_url(url):
                     continue
 
                 folder = f'{prefix}/{subdir}/{item}'
-                print (folder)
+                print (folder, " created.")
                 os.makedirs(folder, exist_ok=True)
                 filename = wget.download(url=url, out=folder)
-                print(filename)
+                print(filename, "downloaded.")
                 shutil.unpack_archive(filename, folder)
