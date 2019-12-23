@@ -28,7 +28,7 @@ class DatasetFetcher:
         prefix = self.config['datadir']
 
         for dataset in self.config['datasets']:
-            subdir = list(dataset[0])
+            subdir = list(dataset)[0]
             urls = dataset[subdir]
             print(urls)
 
