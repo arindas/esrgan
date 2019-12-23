@@ -4,7 +4,7 @@ import wget
 import yaml
 import os
 
-class DatasetGenerator:
+class DatasetFetcher:
     def __init__ (self, config_path="config/data.yaml"):
         self.load_config (config_path)
 
