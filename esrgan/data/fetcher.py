@@ -1,8 +1,10 @@
 import tensorflow as tf
-import pathlib
+import shutil
+import wget
 import yaml
+import os
 
-class DatasetFetcher:
+class DatasetGenerator:
     def __init__ (self, config_path="config/data.yaml"):
         self.load_config (config_path)
 
@@ -14,16 +16,17 @@ class DatasetFetcher:
                 print (exception)
 
     def fetch_datasets (self):
+        prefix = self.config['datadir']
+
         for dataset in self.config['datasets']:
             links = dataset[list(dataset)[0]]
             print (links)
 
-            for folder, link in links.items():
+            for item, link in links.items():
                 if len(link) == 0:
                     continue
 
-                tf.keras.utils.get_file(
-                    origin=link, 
-                    fname=f'{dataset}/{folder}',
-                    untar=True)
-                pass
+                folder = f'${prefix}/${dataset}/${item}'
+                os.makedirs (folder, exist_ok=True)
+                filename = wget.download (url=url, out=folder)
+                shutil.unpack_archive (filename, folder)
