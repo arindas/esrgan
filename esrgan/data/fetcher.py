@@ -2,7 +2,7 @@ import tensorflow as tf
 import pathlib
 import yaml
 
-class DatasetGenerator:
+class DatasetFetcher:
     def __init__ (self, config_path="config/data.yaml"):
         self.load_config (config_path)
 
@@ -15,7 +15,10 @@ class DatasetGenerator:
 
     def fetch_datasets (self):
         for dataset in self.config['datasets']:
-            for folder, link in dataset:
+            links = dataset[list(dataset)[0]]
+            print (links)
+
+            for folder, link in links.items():
                 if len(link) == 0:
                     continue
 
