@@ -22,7 +22,7 @@ class DatasetFetcher:
             links = dataset[list(dataset)[0]]
             print (links)
 
-            for item, link in links.items():
+            for item, url in links.items():
                 if len(link) == 0:
                     continue
 
