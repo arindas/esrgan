@@ -1,44 +1,46 @@
-import shutil
-import wget
-import yaml
 import os
+import shutil
+from concurrent.futures import (
+    ThreadPoolExecutor)
+import yaml
+import wget
 
 
-def is_valid_url(url):
+def is_url(url):
     try:
         from urllib.parse import urlparse
         result = urlparse(url)
-        return all([result.scheme, result.netloc, result.path])
+        return all([result.scheme,
+                    result.netloc,
+                    result.path])
     except ValueError:
         return False
 
 
-class DatasetFetcher:
-    def __init__(self, config_path="config/data.yaml"):
-        self.load_config(config_path)
+def fetch_archive(folder, url):
+    if not is_url(url):
+        raise ValueError("Malformed URL")
 
-    def load_config (self, config_path): 
-        with open(config_path, "r") as stream:
-            try:
-                self.config = yaml.safe_load(stream)
-            except yaml.YAMLError as exception:
-                print(exception)
+    os.makedirs(folder, exist_ok=True)
+    print("[-]", folder, "created.")
+    filename = wget.download(url=url, out=folder)
+    print("[-]", filename, "downloaded.")
+    shutil.unpack_archive(filename, folder)
+    print("[-]", filename, "unpacked.")
 
-    def fetch_datasets(self):
-        prefix = self.config['datadir']
 
-        for dataset in self.config['datasets']:
-            subdir = list(dataset)[0]
+def fetch_datasets(config_path="config/data.yaml"):
+    with open(config_path, 'r') as stream:
+        config = yaml.safe_load(stream)
+    prefix = config['datadir']
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        for dataset in config['datasets'].keys():
+            subdir = list(dataset.keys())[0]
             urls = dataset[subdir]
-            print(subdir, urls)
+            print(dataset, urls)
 
             for item, url in urls.items():
-                if not is_valid_url(url):
+                if not is_url(url):
                     continue
-
                 folder = f'{prefix}/{subdir}/{item}'
-                print (folder, " created.")
-                os.makedirs(folder, exist_ok=True)
-                filename = wget.download(url=url, out=folder)
-                print(filename, "downloaded.")
-                shutil.unpack_archive(filename, folder)
+                executor.submit(fetch_archive, folder, url)
