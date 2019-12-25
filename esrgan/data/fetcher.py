@@ -34,7 +34,7 @@ def fetch_datasets(config_path="config/data.yaml"):
         config = yaml.safe_load(stream)
     prefix = config['datadir']
     with ThreadPoolExecutor(max_workers=8) as executor:
-        for dataset in config['datasets'].keys():
+        for dataset in config['datasets']:
             subdir = list(dataset.keys())[0]
             urls = dataset[subdir]
             print(dataset, urls)
