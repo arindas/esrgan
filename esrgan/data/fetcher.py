@@ -37,8 +37,6 @@ def fetch_datasets(config_path="config/data.yaml"):
         for dataset in config['datasets']:
             subdir = list(dataset.keys())[0]
             urls = dataset[subdir]
-            print(dataset, urls)
-
             for item, url in urls.items():
                 if not is_url(url):
                     continue
