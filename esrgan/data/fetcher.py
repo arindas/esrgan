@@ -29,7 +29,7 @@ def fetch_archive(folder, url):
     print("[-]", filename, "unpacked.")
 
 
-def load_config(config_path="config/data.yaml"):
+def load_config(config_path="config.yaml"):
     with open(config_path, 'r') as stream:
         return yaml.safe_load(stream)
 

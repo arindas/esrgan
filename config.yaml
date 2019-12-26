@@ -1,3 +1,7 @@
+img_size:
+  height: 288
+  width: 288
+
 datadir: "esrgan/datasets"
 
 datasets:
@@ -5,10 +9,4 @@ datasets:
       train_lr: "http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_train_LR_bicubic_X4.zip"
       train_hr: "http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_train_HR.zip"
       validation_lr: "http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_LR_bicubic_X4.zip"
-      validation_hr: "http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_HR.zip"
-  
-  - flickr2k:
-      train_lr: ""
-      train_hr: ""
-      validation_lr: ""
-      validation_hr: ""
+      validation_hr: "http://data.vision.ee.ethz.ch/cvl/DIV2K/DIV2K_valid_HR.zip" 
