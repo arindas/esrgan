@@ -5,6 +5,7 @@ from concurrent.futures import (
 import yaml
 import wget
 
+from esrgan.util.helpers import load_config
 
 def is_url(url):
     try:
@@ -27,12 +28,6 @@ def fetch_archive(folder, url):
     print("[-]", filename, "downloaded.")
     shutil.unpack_archive(filename, folder)
     print("[-]", filename, "unpacked.")
-
-
-def load_config(config_path="config.yaml"):
-    with open(config_path, 'r') as stream:
-        return yaml.safe_load(stream)
-
 
 def fetch_datasets(config=load_config()):
     prefix = config['datadir']
