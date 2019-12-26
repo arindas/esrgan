@@ -29,9 +29,10 @@ def fetch_archive(folder, url):
     print("[-]", filename, "unpacked.")
 
 
-def load_config (config_path="config/data.yaml"):
+def load_config(config_path="config/data.yaml"):
     with open(config_path, 'r') as stream:
         return yaml.safe_load(stream)
+
 
 def fetch_datasets(config=load_config()):
     prefix = config['datadir']
