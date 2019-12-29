@@ -68,6 +68,7 @@ def load_datasets(fetch=True,
     if fetch:
         fetch_datasets(config)
 
+    esrgan.data.augment.SEED = config['seed']
     train_ds = load_dataset_segment('train', config)
     validation_ds = load_dataset_segment('validation', config)
     return train_ds, validation_ds
