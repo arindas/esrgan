@@ -57,7 +57,7 @@ def load_dataset_segment(segment: str,
     hrds = get_augmented_ds_from_paths(hrds,
                                        load_image_from_path,
                                        augmentations)
-    return tf.data.Dataset.zip(lrds, hrds)
+    return tf.data.Dataset.zip((lrds, hrds))
 
 
 def load_datasets(fetch=True,
