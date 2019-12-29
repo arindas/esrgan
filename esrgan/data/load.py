@@ -5,7 +5,7 @@ Module for loading datasets sepcific to esrgan.
 import tensorflow as tf
 import yaml
 
-from esrgan.data.fetcher import fetch_datasets
+from esrgan.data.fetch import fetch_datasets
 from esrgan.util.dataset import (
     get_file_paths_ds,
     get_augmented_ds_from_paths
