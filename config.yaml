@@ -2,6 +2,8 @@ img_size:
   height: 288
   width: 288
 
+seed: 10
+
 datadir: "esrgan/datasets"
 
 datasets:
