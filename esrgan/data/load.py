@@ -51,10 +51,12 @@ def load_dataset_segment(segment: str,
     hrds = get_file_paths_ds(config['datadir'], f'{segment}_hr', 'png')
     augmentations = [rotate, horizontal_flip]
 
-    lrds = get_augmented_ds_from_paths(load_image_from_path,
-                                       lrds, augmentations)
-    hrds = get_augmented_ds_from_paths(load_image_from_path,
-                                       hrds, augmentations)
+    lrds = get_augmented_ds_from_paths(lrds,
+                                       load_image_from_path,
+                                       augmentations)
+    hrds = get_augmented_ds_from_paths(hrds,
+                                       load_image_from_path,
+                                       augmentations)
     return tf.data.Dataset.zip(lrds, hrds)
 
 
