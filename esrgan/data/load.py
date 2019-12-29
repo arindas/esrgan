@@ -7,7 +7,6 @@ import yaml
 
 import esrgan
 
-from esrgan.data.fetch import fetch_datasets
 from esrgan.util.dataset import (
     get_file_paths_ds,
     get_augmented_ds_from_paths
@@ -68,7 +67,7 @@ def load_datasets(fetch=True,
     """
 
     if fetch:
-        fetch_datasets(config)
+        esrgan.data.fetch.fetch_datasets(config)
 
     esrgan.data.augment.SEED = config['seed']
     train_ds = load_dataset_segment('train', config)
