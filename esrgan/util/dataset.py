@@ -39,8 +39,9 @@ def get_augmented_ds_from_paths(paths_ds: tf.data.Dataset, load_func,
     original_ds = paths_ds.map(load_func,
                                tf.data.experimental.AUTOTUNE)
 
-    augmented_ds = tf.data.Dataset()
-    augmented_ds.concatenate(original_ds)
+    # deep clone
+    augmented_ds = original_ds.map(lambda x: x,
+                                   tf.data.experimental.AUTOTUNE)
 
     for map_func in augmentations:
         augmented_ds.concatenate(
