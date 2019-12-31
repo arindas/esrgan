@@ -5,15 +5,19 @@ Module for loading datasets sepcific to esrgan.
 import tensorflow as tf
 import yaml
 
-import esrgan
-
 from esrgan.util.dataset import (
     get_file_paths_ds,
     get_augmented_ds_from_paths
 )
+
+import esrgan.data.augment
 from esrgan.data.augment import (
     horizontal_flip,
     rotate
+)
+
+from esrgan.data.fetch import (
+    fetch_datasets
 )
 
 
@@ -69,7 +73,7 @@ def load_datasets(fetch=True,
     """
 
     if fetch:
-        esrgan.data.fetch.fetch_datasets(config)
+        fetch_datasets(config)
 
     esrgan.data.augment.SEED = config['seed']
     train_ds = load_dataset_segment('train', config)
