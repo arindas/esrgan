@@ -1,5 +1,6 @@
 """
-Module for defining all the blocks to be used in building the network.
+Module for defining all the blocks to be used in implementing an ESRGAN.
+Reference: https://arxiv.org/pdf/1809.00219.pdf
 """
 
 import tensorflow as tf
@@ -98,3 +99,25 @@ class RRDB(tf.keras.Model):
             tensor = input_tensor + self.beta*block(tensor)
 
         return tensor
+
+
+class UpSamplingBlock(tf.keras.Model):
+    """Up sampling block.
+
+    Constructs an up sampling block from a 2D convolution, an
+    upsampling layer(2x) and a LeakyReLU activation.
+
+    Arguments:
+    filters: number of output channels of the convolution
+    """
+    def __init__(self, filters=64, use_bias=True):
+        super(UpSamplingBlock, self).__init__()
+        self.conv = tf.keras.layers.Conv2D(filters=filters,
+                                           kernel_size=(3, 3),
+                                           stride=1,
+                                           use_bias=use_bias)
+        self.upsample = tf.keras.layers.UpSampling2D(size=2)
+        self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)
+
+    def call(self, input_tensor):
+        return self.lrelu(self.conv(self.upsample(input_tensor)))
