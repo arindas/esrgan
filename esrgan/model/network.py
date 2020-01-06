@@ -6,11 +6,12 @@ Reference: https://arxiv.org/pdf/1809.00219.pdf
 import tensorflow as tf
 from esrgan.model.blocks import (
     RRDB,
+    ConvLReLU,
     UpSamplingBlock
 )
 
 
-class Generator(tf.keras.Model):
+class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
     """ESRGAN Generator network composed of RRDB blocks.
 
     tf.keras.Model implementation of the ESRGAN generator network.
@@ -24,10 +25,9 @@ class Generator(tf.keras.Model):
     Builds an RRDBNetwork from the given parameters.
 
     Arguments:
-    filters:
-    growth_channels:
-    blocks: number of RRDB blocks to be used
-
+    blocks: number of basic (RRDB) blocks to be used
+    filters: number of output channels in convolutions outside of RRDBs
+    growth_channels: intermediate output channels in residual dense blocks
     """
     def __init__(self,
                  blocks=5,
@@ -48,8 +48,9 @@ class Generator(tf.keras.Model):
                                                  kernel_size=(3, 3),
                                                  stride=1)
 
-        self.upsample1 = UpSamplingBlock(filters=filters)
-        self.upsample2 = UpSamplingBlock(filters=filters)
+        self.upsample = tf.keras.Sequential(
+            [UpSamplingBlock(filters=filters)
+             for i in range(2)])
 
         self.hr_conv = tf.keras.layers.Conv2D(filters=filters,
                                               kernel_size=(3, 3),
@@ -59,13 +60,32 @@ class Generator(tf.keras.Model):
                                                   stride=1)
 
     def call(self, input_tensor):
+        """Foward propagation on input_tensor.
+
+        Arguments:
+        input_tensor: tensor to operate on
+        """
         single_conv = self.input_conv(input_tensor)
         trunk = self.trunk_conv(self.rrdb_trunk(single_conv))
         trunk = single_conv + trunk
 
-        upsampled_tensor = self.upsample2(self.upsample1(trunk))
-        return self.output_conv(upsampled_tensor)
+        upsampled_tensor = self.upsample(trunk)
+        hr_tensor = self.hr_conv(upsampled_tensor)
+        return self.output_conv(hr_tensor)
 
 
-class Discriminator(tf.keras.Model):
-    pass
+def get_discriminator_trunk():
+    layers = [
+        ConvLReLU(),
+        ConvLReLU(use_batch_norm=True, stride=2),
+        ConvLReLU(filters=128, use_batch_norm=True, stride=1),
+        ConvLReLU(filters=128, use_batch_norm=True, stride=2),
+        ConvLReLU(filters=256, use_batch_norm=True, stride=1),
+        ConvLReLU(filters=256, use_batch_norm=True, stride=2),
+        ConvLReLU(filters=512, use_batch_norm=True, stride=1),
+        ConvLReLU(filters=512, use_batch_norm=True, stride=2),
+        tf.keras.layers.Dense(1024),
+        tf.keras.layers.LeakyReLU(alpha=0.2),
+        tf.keras.layers.Dense(1)
+    ]
+    return tf.keras.Sequential(layers)

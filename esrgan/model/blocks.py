@@ -6,31 +6,47 @@ Reference: https://arxiv.org/pdf/1809.00219.pdf
 import tensorflow as tf
 
 
-class ConvLReLU(tf.keras.Model):
+class ConvLReLU(tf.keras.Model):  # pylint: disable=too-few-public-methods
     """Conv LeakyReLU pair.
 
     Elementary block inside ResidualDenseBlock. It comprises of
-    a 2D Convolution followed by a leaky ReLu activation.
+    a 2D Convolution followed by a leaky ReLu activation. Optionally
+    there may be batch normalization layer in the middle.
 
     Arguments:
     filters: number of output channels
+    stride: stride of convolutions
+    batch_norm: whether to use batch normalization
     use_bias: refer tf.keras.layers.Conv2D
     """
-    def __init__(self, filters=32, use_bias=True):
+    def __init__(self, filters=64, stride=1, 
+                 use_batch_norm=False, use_bias=True):
         super(ConvLReLU, self).__init__()
 
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=(3, 3),
-                                           stride=1,
+                                           stride=stride,
                                            use_bias=use_bias)
+        if use_batch_norm:
+            self.use_batch_norm = use_batch_norm
+            self.batch_norm = tf.keras.layers.BatchNormalization()
+
         self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)
 
     def call(self, input_tensor):
+        """Forward propagation for ConvLReLU
+
+        Arguments:
+        input_tensor: tensor to be operated on
+        """
         tensor = self.conv(input_tensor)
+        if self.use_batch_norm:
+            tensor = self.batch_norm(tensor)
         tensor = self.lrelu(tensor)
         return tensor
 
 
+# pylint: disable=too-few-public-methods
 class ResidualDenseBlock(tf.keras.Model):
     """Residual dense block insided RRDB blocks
 
@@ -60,6 +76,11 @@ class ResidualDenseBlock(tf.keras.Model):
                                                   use_bias=use_bias)
 
     def call(self, input_tensor):
+        """Forward propagation for ResidualDenseBlock
+
+        Arguments:
+        input_tensor: tensor to be operated on
+        """
         residue = [input_tensor]
         residue.append(self.input_convlr(input_tensor))
 
@@ -70,7 +91,7 @@ class ResidualDenseBlock(tf.keras.Model):
         return self.output_conv(tf.concat(residue, 1))
 
 
-class RRDB(tf.keras.Model):
+class RRDB(tf.keras.Model):  # pylint: disable=too-few-public-methods
     """Residual in Residual Dense Block
 
     Constructs a residual in residual dense block from three
@@ -94,6 +115,11 @@ class RRDB(tf.keras.Model):
         self.beta = beta
 
     def call(self, input_tensor):
+        """Forward propagation for ResidualDenseBlock
+
+        Arguments:
+        input_tensor: tensor to be operated on
+        """
         tensor = input_tensor
         for block in self.dense_blocks:
             tensor = input_tensor + self.beta*block(tensor)
@@ -101,6 +127,7 @@ class RRDB(tf.keras.Model):
         return tensor
 
 
+# pylint: disable=too-few-public-methods
 class UpSamplingBlock(tf.keras.Model):
     """Up sampling block.
 
@@ -120,4 +147,9 @@ class UpSamplingBlock(tf.keras.Model):
         self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)
 
     def call(self, input_tensor):
+        """Forward propagation for ResidualDenseBlock
+
+        Arguments:
+        input_tensor: tensor to be operated on
+        """
         return self.lrelu(self.conv(self.upsample(input_tensor)))
