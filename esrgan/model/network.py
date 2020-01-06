@@ -10,7 +10,7 @@ from esrgan.model.blocks import (
 )
 
 
-class RRDBNetwork(tf.keras.Model):
+class Generator(tf.keras.Model):
     """ESRGAN Generator network composed of RRDB blocks.
 
     tf.keras.Model implementation of the ESRGAN generator network.
@@ -33,7 +33,7 @@ class RRDBNetwork(tf.keras.Model):
                  blocks,
                  filters=64,
                  growth_channels=32):
-        super(RRDBNetwork, self).__init__()
+        super(Generator, self).__init__()
 
         self.input_conv = tf.keras.layers.Conv2D(filters=filters,
                                                  kernel_size=(3, 3),
@@ -67,4 +67,5 @@ class RRDBNetwork(tf.keras.Model):
         return self.output_conv(upsampled_tensor)
 
 
-Generator = RRDBNetwork
+class Discriminator(tf.keras.Model):
+    pass
