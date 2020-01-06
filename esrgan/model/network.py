@@ -30,7 +30,7 @@ class Generator(tf.keras.Model):
 
     """
     def __init__(self,
-                 blocks,
+                 blocks=5,
                  filters=64,
                  growth_channels=32):
         super(Generator, self).__init__()

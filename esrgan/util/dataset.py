@@ -36,12 +36,8 @@ def get_augmented_ds_from_paths(paths_ds: tf.data.Dataset, load_func,
     load_func -- callable to load image from path
     augmentations -- list of callable augmentation functions
     """
-    original_ds = paths_ds.map(load_func,
-                               tf.data.experimental.AUTOTUNE)
-
-    # deep clone
-    augmented_ds = original_ds.map(lambda x: x,
-                                   tf.data.experimental.AUTOTUNE)
+    original_ds = paths_ds.map(load_func, tf.data.experimental.AUTOTUNE)
+    augmented_ds = original_ds.take(-1)
 
     for map_func in augmentations:
         augmented_ds.concatenate(
