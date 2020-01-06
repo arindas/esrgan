@@ -75,6 +75,7 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
 
 def get_discriminator_trunk():
+    """Builds and returns the ESRGAN discriminator trunk"""
     layers = [
         ConvLReLU(),
         ConvLReLU(use_batch_norm=True, stride=2),
