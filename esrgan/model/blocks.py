@@ -27,8 +27,9 @@ class ConvLReLU(tf.keras.Model):  # pylint: disable=too-few-public-methods
                                            kernel_size=(3, 3),
                                            strides=strides,
                                            use_bias=use_bias)
+
+        self.use_batch_norm = use_batch_norm
         if use_batch_norm:
-            self.use_batch_norm = use_batch_norm
             self.batch_norm = tf.keras.layers.BatchNormalization()
 
         self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)
