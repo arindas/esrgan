@@ -15,17 +15,17 @@ class ConvLReLU(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
     Arguments:
     filters: number of output channels
-    stride: stride of convolutions
+    strides: strides of convolutions
     batch_norm: whether to use batch normalization
     use_bias: refer tf.keras.layers.Conv2D
     """
-    def __init__(self, filters=64, stride=1, 
+    def __init__(self, filters=64, strides=1,
                  use_batch_norm=False, use_bias=True):
         super(ConvLReLU, self).__init__()
 
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=(3, 3),
-                                           stride=stride,
+                                           strides=strides,
                                            use_bias=use_bias)
         if use_batch_norm:
             self.use_batch_norm = use_batch_norm
@@ -72,7 +72,7 @@ class ResidualDenseBlock(tf.keras.Model):
 
         self.output_conv = tf.keras.layers.Conv2D(filters=filters,
                                                   kernel_size=(3, 3),
-                                                  stride=1,
+                                                  strides=1,
                                                   use_bias=use_bias)
 
     def call(self, input_tensor):
@@ -141,7 +141,7 @@ class UpSamplingBlock(tf.keras.Model):
         super(UpSamplingBlock, self).__init__()
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=(3, 3),
-                                           stride=1,
+                                           strides=1,
                                            use_bias=use_bias)
         self.upsample = tf.keras.layers.UpSampling2D(size=2)
         self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)

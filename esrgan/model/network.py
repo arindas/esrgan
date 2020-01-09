@@ -37,7 +37,7 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.input_conv = tf.keras.layers.Conv2D(filters=filters,
                                                  kernel_size=(3, 3),
-                                                 stride=1)
+                                                 strides=1)
 
         self.rrdb_trunk = tf.keras.Sequential(
             [RRDB(filters=filters,
@@ -46,7 +46,7 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.trunk_conv = tf.keras.layers.Conv2D(filters=filters,
                                                  kernel_size=(3, 3),
-                                                 stride=1)
+                                                 strides=1)
 
         self.upsample = tf.keras.Sequential(
             [UpSamplingBlock(filters=filters)
@@ -54,10 +54,10 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.hr_conv = tf.keras.layers.Conv2D(filters=filters,
                                               kernel_size=(3, 3),
-                                              stride=1)
+                                              strides=1)
         self.output_conv = tf.keras.layers.Conv2D(filters=3,
                                                   kernel_size=(3, 3),
-                                                  stride=1)
+                                                  strides=1)
 
     def call(self, input_tensor):
         """Foward propagation on input_tensor.
@@ -78,13 +78,13 @@ def get_discriminator_trunk():
     """Builds and returns the ESRGAN discriminator trunk"""
     layers = [
         ConvLReLU(),
-        ConvLReLU(use_batch_norm=True, stride=2),
-        ConvLReLU(filters=128, use_batch_norm=True, stride=1),
-        ConvLReLU(filters=128, use_batch_norm=True, stride=2),
-        ConvLReLU(filters=256, use_batch_norm=True, stride=1),
-        ConvLReLU(filters=256, use_batch_norm=True, stride=2),
-        ConvLReLU(filters=512, use_batch_norm=True, stride=1),
-        ConvLReLU(filters=512, use_batch_norm=True, stride=2),
+        ConvLReLU(use_batch_norm=True, strides=2),
+        ConvLReLU(filters=128, use_batch_norm=True, strides=1),
+        ConvLReLU(filters=128, use_batch_norm=True, strides=2),
+        ConvLReLU(filters=256, use_batch_norm=True, strides=1),
+        ConvLReLU(filters=256, use_batch_norm=True, strides=2),
+        ConvLReLU(filters=512, use_batch_norm=True, strides=1),
+        ConvLReLU(filters=512, use_batch_norm=True, strides=2),
         tf.keras.layers.Dense(1024),
         tf.keras.layers.LeakyReLU(alpha=0.2),
         tf.keras.layers.Dense(1)
