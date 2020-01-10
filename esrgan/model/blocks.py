@@ -26,7 +26,8 @@ class ConvLReLU(tf.keras.Model):  # pylint: disable=too-few-public-methods
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=(3, 3),
                                            strides=strides,
-                                           use_bias=use_bias)
+                                           use_bias=use_bias,
+                                           padding='same')
 
         self.use_batch_norm = use_batch_norm
         if use_batch_norm:
@@ -86,7 +87,7 @@ class ResidualDenseBlock(tf.keras.Model):
         residue.append(self.input_convlr(input_tensor))
 
         for layer in self.inner_layers:
-            tensor = layer(tf.concat(residue, 1))
+            tensor = layer(tf.concat(residue, -1))
             residue.append(tensor)
 
         return self.output_conv(tf.concat(residue, 1))
