@@ -37,7 +37,8 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.input_conv = tf.keras.layers.Conv2D(filters=filters,
                                                  kernel_size=(3, 3),
-                                                 strides=1)
+                                                 strides=1,
+                                                 padding='same')
 
         self.rrdb_trunk = tf.keras.Sequential(
             [RRDB(filters=filters,
@@ -46,7 +47,8 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.trunk_conv = tf.keras.layers.Conv2D(filters=filters,
                                                  kernel_size=(3, 3),
-                                                 strides=1)
+                                                 strides=1,
+                                                 padding='same')
 
         self.upsample = tf.keras.Sequential(
             [UpSamplingBlock(filters=filters)
@@ -54,10 +56,12 @@ class Generator(tf.keras.Model):  # pylint: disable=too-few-public-methods
 
         self.hr_conv = tf.keras.layers.Conv2D(filters=filters,
                                               kernel_size=(3, 3),
-                                              strides=1)
+                                              strides=1,
+                                              padding='same')
         self.output_conv = tf.keras.layers.Conv2D(filters=3,
                                                   kernel_size=(3, 3),
-                                                  strides=1)
+                                                  strides=1,
+                                                  padding='same')
 
     def call(self, input_tensor):
         """Foward propagation on input_tensor.
