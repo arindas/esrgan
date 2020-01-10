@@ -75,7 +75,8 @@ class ResidualDenseBlock(tf.keras.Model):
         self.output_conv = tf.keras.layers.Conv2D(filters=filters,
                                                   kernel_size=(3, 3),
                                                   strides=1,
-                                                  use_bias=use_bias)
+                                                  use_bias=use_bias,
+                                                  padding='same')
 
     def call(self, input_tensor):
         """Forward propagation for ResidualDenseBlock
@@ -149,7 +150,8 @@ class UpSamplingBlock(tf.keras.Model):
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=(3, 3),
                                            strides=1,
-                                           use_bias=use_bias)
+                                           use_bias=use_bias,
+                                           padding='same')
         self.upsample = tf.keras.layers.UpSampling2D(size=2)
         self.lrelu = tf.keras.layers.LeakyReLU(alpha=0.2)
 
