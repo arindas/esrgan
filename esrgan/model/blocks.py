@@ -84,13 +84,18 @@ class ResidualDenseBlock(tf.keras.Model):
         input_tensor: tensor to be operated on
         """
         residue = [input_tensor]
-        residue.append(self.input_convlr(input_tensor))
+        tensor = self.input_convlr(input_tensor)
+        print(tensor.shape)
+        residue.append(tensor)
 
         for layer in self.inner_layers:
             tensor = layer(tf.concat(residue, -1))
+            print(tensor.shape)
             residue.append(tensor)
 
-        return self.output_conv(tf.concat(residue, -1))
+        tensor = tf.concat(residue, -1)
+        print(tensor.shape)
+        return self.output_conv(tensor)
 
 
 class RRDB(tf.keras.Model):  # pylint: disable=too-few-public-methods
