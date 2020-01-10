@@ -86,16 +86,13 @@ class ResidualDenseBlock(tf.keras.Model):
         """
         residue = [input_tensor]
         tensor = self.input_convlr(input_tensor)
-        print(tensor.shape)
         residue.append(tensor)
 
         for layer in self.inner_layers:
             tensor = layer(tf.concat(residue, -1))
-            print(tensor.shape)
             residue.append(tensor)
 
         tensor = tf.concat(residue, -1)
-        print(tensor.shape)
         return self.output_conv(tensor)
 
 
