@@ -90,7 +90,7 @@ class ResidualDenseBlock(tf.keras.Model):
             tensor = layer(tf.concat(residue, -1))
             residue.append(tensor)
 
-        return self.output_conv(tf.concat(residue, 1))
+        return self.output_conv(tf.concat(residue, -1))
 
 
 class RRDB(tf.keras.Model):  # pylint: disable=too-few-public-methods
